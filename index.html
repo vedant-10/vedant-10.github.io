@@ -208,9 +208,9 @@
 
         // 4. Accept Apology Button -> Opens WhatsApp with a Pre-written Message
         function acceptApology() {
-            sendTelegramNotification("🎉 Aditi clicked 'Yes, I forgive you!' ❤️");
+            sendTelegramNotification("🎉 Aditi clicked 'Yes, I forgive you!'");
 
-            const beautifulWhatsAppText = "Yes, I forgive you! ❤️";
+            const beautifulWhatsAppText = "Yes, I forgive you!";
             const cleanPhone = YOUR_PHONE_NUMBER.replace('+', '');
             const whatsappUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(beautifulWhatsAppText)}`;
             
