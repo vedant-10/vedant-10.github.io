@@ -6,39 +6,47 @@ document.querySelector(".menu-toggle");
 const navLinks =
 document.querySelector(".nav-links");
 
+if(menuToggle){
+
 menuToggle.addEventListener("click", () => {
+
 navLinks.classList.toggle("active");
+
 });
 
-const rotatingSubtitles = [
+}
+
+const subtitles = [
+
 "EHT Electrical Design",
 "Engineering Automation",
-"Refinery EPC Projects",
 "Electrical BIM",
+"Refinery EPC Projects",
 "Excel VBA Development"
+
 ];
 
-let currentIndex = 0;
+let current = 0;
 
 const tag =
 document.querySelector(".spec-tag");
 
 setInterval(() => {
 
-currentIndex =
-(currentIndex + 1) %
-rotatingSubtitles.length;
+current =
+(current + 1) %
+subtitles.length;
 
 tag.innerHTML =
 `<span class="status-dot"></span>
-${rotatingSubtitles[currentIndex]}`;
+${subtitles[current]}`;
 
-}, 3000);
+},3000);
 
 const reveals =
 document.querySelectorAll(".reveal");
 
-const observer =
+const revealObserver =
 new IntersectionObserver(entries => {
 
 entries.forEach(entry => {
@@ -55,51 +63,51 @@ entry.target.classList.add("active");
 
 reveals.forEach(item => {
 
-observer.observe(item);
+revealObserver.observe(item);
 
 });
+
+let metricAnimated = false;
+
+const metricBar =
+document.querySelector(".metrics-bar");
 
 const metrics =
 document.querySelectorAll(".metric-num");
 
-let animated = false;
-
-const metricsBar =
-document.querySelector(".metrics-bar");
-
-const metricsObserver =
+const observer =
 new IntersectionObserver(entries => {
 
 entries.forEach(entry => {
 
-if(entry.isIntersecting && !animated){
+if(entry.isIntersecting && !metricAnimated){
 
-animated = true;
+metricAnimated = true;
 
 metrics.forEach(metric => {
 
-const endValue =
-parseInt(metric.innerText);
+const finalValue =
+parseInt(metric.textContent);
 
 let current = 0;
 
 const step =
-Math.max(
-1,
-Math.ceil(endValue / 50)
-);
+Math.ceil(finalValue/40);
 
 const timer =
 setInterval(() => {
 
 current += step;
 
-if(current >= endValue){
-current = endValue;
+if(current >= finalValue){
+
+current = finalValue;
+
 clearInterval(timer);
+
 }
 
-metric.innerText =
+metric.textContent =
 current + "+";
 
 },25);
@@ -112,7 +120,9 @@ current + "+";
 
 },{threshold:0.5});
 
-metricsObserver.observe(metricsBar);
+if(metricBar){
+observer.observe(metricBar);
+}
 
 document.getElementById("year").textContent =
 new Date().getFullYear();
