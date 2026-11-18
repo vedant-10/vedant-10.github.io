@@ -1,5 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
 
+/* MOBILE MENU */
+
 const menuToggle =
 document.querySelector(".menu-toggle");
 
@@ -16,40 +18,74 @@ navLinks.classList.toggle("active");
 
 }
 
+/* CLOSE MENU AFTER CLICK */
+
+document
+.querySelectorAll(".nav-links a")
+.forEach(link => {
+
+link.addEventListener("click", () => {
+
+navLinks.classList.remove("active");
+
+});
+
+});
+
+/* ROTATING SPECIALIZATION */
+
 const subtitles = [
 
 "EHT Electrical Design",
 "Engineering Automation",
 "Electrical BIM",
 "Refinery EPC Projects",
-"Excel VBA Development"
+"Excel VBA Development",
+"Hazardous Area Engineering",
+"Project Engineering"
 
 ];
 
-let current = 0;
+let currentIndex = 0;
 
-const tag =
+const specTag =
 document.querySelector(".spec-tag");
+
+if(specTag){
 
 setInterval(() => {
 
-current =
-(current + 1) %
+currentIndex =
+(currentIndex + 1) %
 subtitles.length;
 
-tag.innerHTML =
-`<span class="status-dot"></span>
-${subtitles[current]}`;
+specTag.style.opacity = "0";
 
-},3000);
+setTimeout(() => {
+
+specTag.innerHTML =
+`<span class="status-dot"></span>
+${subtitles[currentIndex]}`;
+
+specTag.style.opacity = "1";
+
+},250);
+
+},3500);
+
+}
+
+/* SCROLL REVEAL */
 
 const reveals =
 document.querySelectorAll(".reveal");
 
 const revealObserver =
-new IntersectionObserver(entries => {
+new IntersectionObserver(
 
-entries.forEach(entry => {
+(entries)=>{
+
+entries.forEach(entry=>{
 
 if(entry.isIntersecting){
 
@@ -59,55 +95,64 @@ entry.target.classList.add("active");
 
 });
 
+},
+
+{
+threshold:0.15
+}
+
+);
+
+reveals.forEach(section=>{
+
+revealObserver.observe(section);
+
 });
 
-reveals.forEach(item => {
+/* COUNTER ANIMATION */
 
-revealObserver.observe(item);
-
-});
-
-let metricAnimated = false;
-
-const metricBar =
+const statsSection =
 document.querySelector(".metrics-bar");
 
-const metrics =
-document.querySelectorAll(".metric-num");
+let animated = false;
 
-const observer =
-new IntersectionObserver(entries => {
+if(statsSection){
 
-entries.forEach(entry => {
+const statsObserver =
+new IntersectionObserver(entries=>{
 
-if(entry.isIntersecting && !metricAnimated){
+entries.forEach(entry=>{
 
-metricAnimated = true;
+if(entry.isIntersecting && !animated){
 
-metrics.forEach(metric => {
+animated = true;
 
-const finalValue =
-parseInt(metric.textContent);
+document
+.querySelectorAll(".metric-num")
+.forEach(counter=>{
+
+const target =
+parseInt(counter.textContent);
 
 let current = 0;
 
-const step =
-Math.ceil(finalValue/40);
+const increment =
+Math.ceil(target / 40);
 
 const timer =
-setInterval(() => {
+setInterval(()=>{
 
-current += step;
+current += increment;
 
-if(current >= finalValue){
+if(current >= target){
 
-current = finalValue;
+current = target;
 
 clearInterval(timer);
 
 }
 
-metric.textContent =
+counter.textContent =
 current + "+";
 
 },25);
@@ -120,11 +165,20 @@ current + "+";
 
 },{threshold:0.5});
 
-if(metricBar){
-observer.observe(metricBar);
+statsObserver.observe(statsSection);
+
 }
 
-document.getElementById("year").textContent =
+/* YEAR */
+
+const year =
+document.getElementById("year");
+
+if(year){
+
+year.textContent =
 new Date().getFullYear();
+
+}
 
 });
